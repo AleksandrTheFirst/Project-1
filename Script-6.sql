@@ -2,7 +2,7 @@
 
 CREATE TABLE IF NOT EXISTS genres(
 	id SERIAL primary key,
-	name VARCHAR(40) not null
+	genres_name VARCHAR(40) not null
 );
 CREATE TABLE IF NOT EXISTS artists(
 	id SERIAL primary key,
@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS artistsgenres(
 );
 CREATE TABLE IF NOT EXISTS albums(
 	id SERIAL primary key,
-	name VARCHAR(40) not null,
+	albums_name VARCHAR(40) not null,
 	release_date DATE not null
 );
 CREATE TABLE IF NOT EXISTS artistsalbums(
@@ -25,13 +25,13 @@ CREATE TABLE IF NOT EXISTS artistsalbums(
 );
 CREATE TABLE IF NOT EXISTS tracks(
 	id SERIAL primary key,
-	name VARCHAR(40) not null,
+	tracks_name VARCHAR(40) not null,
 	duration INTEGER not null,
 	albums_id INTEGER not null references albums(id)
 );
 CREATE TABLE IF NOT EXISTS collections(
 	id SERIAL primary key,
-	name VARCHAR(40) not null,
+	collections_name VARCHAR(40) not null,
 	release_date DATE not null
 );
 CREATE TABLE IF NOT EXISTS trackscollections(
@@ -223,11 +223,12 @@ values(13,9);
 
 /// Селект выборка
 
---Названия сборников, в которых присутствует конкретный исполнитель
-select collections_name from collections c 
-left join trackscollections t on t.collections_id = c.id 
-left join tracks t2 on t.tracks_id = t2.id 
-left join albums a on t2.id = a.id 
-left join artistsalbums a2 on a.id = a2.albums_id 
-left join artists a3 on a2.id = a3.id 
-where nickname = 'big strides';
+SELECT albums_name FROM albums a
+LEFT JOIN artistsalbums am ON a.id = am.albums_id
+LEFT JOIN artists a3 ON a3.id = am.artists_id
+LEFT JOIN artistsgenres a2 ON a3.id = a2.artists_id
+LEFT JOIN genres g2 ON g2.id = a2.genres_id
+GROUP BY albums_name 
+HAVING COUNT(DISTINCT genres_name) > 1
+ORDER BY albums_name;
+
