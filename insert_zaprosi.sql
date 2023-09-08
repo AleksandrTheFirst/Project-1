@@ -1,48 +1,4 @@
-/// Таблица
-
-CREATE TABLE IF NOT EXISTS genres(
-	id SERIAL primary key,
-	genres_name VARCHAR(40) not null
-);
-CREATE TABLE IF NOT EXISTS artists(
-	id SERIAL primary key,
-	nickname VARCHAR(40) not null
-);
-CREATE TABLE IF NOT EXISTS artistsgenres(
-	id SERIAL primary key,
-	artists_id INTEGER not null references artists(id),
-	genres_id INTEGER not null references genres(id)
-);
-CREATE TABLE IF NOT EXISTS albums(
-	id SERIAL primary key,
-	albums_name VARCHAR(40) not null,
-	release_date DATE not null
-);
-CREATE TABLE IF NOT EXISTS artistsalbums(
-	id SERIAL primary key,
-	artists_id INTEGER not null references artists(id),
-	albums_id INTEGER not null references albums(id)
-);
-CREATE TABLE IF NOT EXISTS tracks(
-	id SERIAL primary key,
-	tracks_name VARCHAR(40) not null,
-	duration INTEGER not null,
-	albums_id INTEGER not null references albums(id)
-);
-CREATE TABLE IF NOT EXISTS collections(
-	id SERIAL primary key,
-	collections_name VARCHAR(40) not null,
-	release_date DATE not null
-);
-CREATE TABLE IF NOT EXISTS trackscollections(
-	id SERIAL primary key,
-	tracks_id INTEGER not null references tracks(id),
-	collections_id INTEGER not null references collections(id)
-);
-
-/// Присоединение данных к таблицам
-
---Имена групп/исполнителей
+	--Имена групп/исполнителей
 insert into artists(nickname)
 values ('Red Hot Chili Peppers');
 
@@ -161,6 +117,14 @@ values('Random Collection of The Frames', '2000.04.12');
 insert into collections (name, release_date)
 values('Random Collection of Damien Jurado', '2019.02.01');
 
+insert into collections (collections_name, release_date)
+values('Random Collection of Ferdous', '2022.06.02');
+
+insert into collections (collections_name, release_date)
+values('Random Collection of Jaden', '2023.01.20');
+
+
+
 --Присоединение артистов к жанру
 insert into artistsgenres (artists_id, genres_id)
 values('1', '1');
@@ -180,6 +144,9 @@ values('5', '3');
 insert into artistsgenres (artists_id, genres_id)
 values('7', '3');
 
+insert into artistsgenres (artists_id, genres_id)
+values('10', '1');
+
 --Присоединение артистов и альбомов
 insert into artistsalbums(artists_id, albums_id)
 values(1,1);
@@ -195,6 +162,9 @@ values(8,7);
 
 insert into artistsalbums(artists_id, albums_id)
 values(10,6);
+
+insert into artistsalbums(artists_id, albums_id)
+values(5,8);
 
 --Присоединение названия треков и сборников
 insert into trackscollections(tracks_id, collections_id)
@@ -221,14 +191,15 @@ values(12,8);
 insert into trackscollections(tracks_id, collections_id)
 values(13,9);
 
-/// Селект выборка
+insert into trackscollections(tracks_id, collections_id)
+values(14,10);
 
-SELECT albums_name FROM albums a
-LEFT JOIN artistsalbums am ON a.id = am.albums_id
-LEFT JOIN artists a3 ON a3.id = am.artists_id
-LEFT JOIN artistsgenres a2 ON a3.id = a2.artists_id
-LEFT JOIN genres g2 ON g2.id = a2.genres_id
-GROUP BY albums_name 
-HAVING COUNT(DISTINCT genres_name) > 1
-ORDER BY albums_name;
+insert into trackscollections(tracks_id, collections_id)
+values(15,10);
+
+insert into trackscollections(tracks_id, collections_id)
+values(10,11);
+
+insert into trackscollections(tracks_id, collections_id)
+values(11,11);
 
