@@ -12,11 +12,12 @@ where release_date >= '2018.01.01' and release_date <= '2020.01.01'
 
 --Исполнители, чьё имя состоит из одного слова
 select nickname from artists
-where nickname like '%';
+where not nickname like '% %';
 
 --Название треков, которые содержат слово «мой» или «my»
 select name from tracks
 where name like '%мой%' or name like '%My%'
+
 --Количество исполнителей в каждом жанре
 select genres_name, count(a.nickname) from genres g
 left join artistsgenres a2 on g.id = a2.genres_id 
@@ -41,8 +42,8 @@ order by avg(duration);
 select nickname from artists a 
 left join artistsalbums a2 on a.id = a2.artists_id
 left join albums a3 on a2.albums_id = a3.id
-where release_date < '2020.01.01' or release_date > '2021.01.01'
-group by nickname 
+where nickname not in (select nickname where release_date >= '2020.01.01' and release_date < '2021.01.01')
+group by nickname
 order by nickname;
 
 
