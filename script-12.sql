@@ -42,9 +42,7 @@ order by avg(duration);
 select nickname from artists a 
 left join artistsalbums a2 on a.id = a2.artists_id
 left join albums a3 on a2.albums_id = a3.id
-where nickname not in (select nickname where release_date >= '2020.01.01' and release_date < '2021.01.01')
-group by nickname
-order by nickname;
+where nickname not in (select nickname from artistsalbums where release_date >= '2020.01.01' and release_date < '2021.01.01');
 
 
 --Названия сборников, в которых присутствует конкретный исполнитель
